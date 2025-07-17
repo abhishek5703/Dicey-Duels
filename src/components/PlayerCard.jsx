@@ -1,5 +1,5 @@
 const PlayerCard = ({ player, isActive }) => {
-  const winningScore = 50;
+  const winningScore = 100;
   const progressPercent = Math.min((player.score / winningScore) * 100, 100);
 
   return (

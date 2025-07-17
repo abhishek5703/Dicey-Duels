@@ -2,15 +2,16 @@
   width: 100px;
   height: 100px;
   perspective: 1000px;
+  margin: auto;
 }
 
 .dice-face {
   position: relative;
   width: 100%;
   height: 100%;
-  background-color: white;
-  border-radius: 12px;
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+  background: linear-gradient(145deg, #ffffff, #e6e6e6);
+  border-radius: 16px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.25);
   border: 2px solid #333;
 }
 

@@ -21,7 +21,7 @@ const Game = () => {
     if (!initialPlayers) {
       navigate("/names");
     } else {
-      setPlayers(initialPlayers);
+      setPlayers(initialPlayers.map(p => ({ ...p, score: 0 })));
     }
   }, [initialPlayers, navigate]);
 
@@ -29,24 +29,21 @@ const Game = () => {
     if (isRolling || gameOver) return;
     setIsRolling(true);
 
-    let rollTimes = 6;
-    let rolls = [];
-    for (let i = 0; i < rollTimes - 1; i++) {
-      rolls.push(Math.floor(Math.random() * 6) + 1);
-    }
-    // Final roll determines actual outcome
+    const rollSequence = Array.from({ length: 5 }, () =>
+      Math.floor(Math.random() * 6) + 1
+    );
     const finalRoll = Math.floor(Math.random() * 6) + 1;
-    rolls.push(finalRoll);
+    rollSequence.push(finalRoll);
 
-    rolls.forEach((val, idx) => {
+    rollSequence.forEach((val, idx) => {
       setTimeout(() => {
         setDiceValue(val);
-        if (idx === rolls.length - 1) {
+        if (idx === rollSequence.length - 1) {
           if (val === 1) {
             setTurnScore(0);
             nextPlayer();
           } else {
-            setTurnScore((prev) => prev + val);
+            setTurnScore(prev => prev + val);
           }
           setIsRolling(false);
         }
@@ -56,12 +53,13 @@ const Game = () => {
 
   const holdScore = () => {
     if (isRolling || gameOver) return;
+
     const updatedPlayers = [...players];
     updatedPlayers[currentPlayer].score += turnScore;
     setPlayers(updatedPlayers);
     setTurnScore(0);
 
-    if (updatedPlayers[currentPlayer].score >= 50) {
+    if (updatedPlayers[currentPlayer].score >= 100) {
       setGameOver(true);
     } else {
       nextPlayer();
@@ -73,7 +71,7 @@ const Game = () => {
   };
 
   const resetGame = () => {
-    const resetPlayers = players.map((p) => ({ ...p, score: 0 }));
+    const resetPlayers = players.map(p => ({ ...p, score: 0 }));
     setPlayers(resetPlayers);
     setTurnScore(0);
     setCurrentPlayer(0);
@@ -82,22 +80,27 @@ const Game = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-100 to-white p-6">
-      <h1 className="text-4xl font-bold text-center mb-6 text-blue-700">🎲 Dicey Duels</h1>
+    <div className="min-h-screen bg-gradient-to-br from-blue-100 to-white px-6 py-10">
+      <h1 className="text-4xl font-extrabold text-center mb-8 text-blue-700 drop-shadow-sm">
+        🎲 Dicey Duels
+      </h1>
 
       {/* Player Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+      <div className="flex flex-wrap justify-center gap-8 mb-12 px-4">
         {players.map((player, index) => (
-          <PlayerCard
-            key={index}
-            player={player}
-            isActive={index === currentPlayer}
-          />
+          <div key={index} className="w-full sm:w-[300px]">
+            <PlayerCard
+              player={player}
+              isActive={index === currentPlayer}
+              isWinner={gameOver && index === currentPlayer}
+            />
+          </div>
         ))}
       </div>
 
+
       {/* Dice */}
-      <div className="flex justify-center mb-8">
+      <div className="flex justify-center mb-10">
         <Dice value={diceValue} isRolling={isRolling} />
       </div>
 
@@ -110,27 +113,28 @@ const Game = () => {
         gameOver={gameOver}
       />
 
-      {/* Winner Banner */}
+      {/* Winner Announcement */}
       {gameOver && (
-        <div className="mt-6 text-center">
-          <h2 className="text-3xl font-bold text-green-600 animate-bounce">
+        <div className="mt-8 text-center">
+          <h2 className="text-3xl font-bold text-green-600 animate-fade-in-up">
             🎉 {players[currentPlayer].name} Wins!
           </h2>
         </div>
       )}
 
-      {/* Buttons */}
-      <div className="mt-8 flex gap-4 justify-center">
+      {/* Game Action Buttons */}
+      <div className="mt-10 flex justify-center gap-6">
         <button
           onClick={resetGame}
-          className="flex items-center gap-2 bg-yellow-400 hover:bg-yellow-500 text-black font-semibold px-5 py-2 rounded-lg shadow-md transition-all duration-300"
+          disabled={isRolling}
+          className="flex items-center gap-2 bg-yellow-400 hover:bg-yellow-500 text-black font-semibold px-6 py-2 rounded-lg shadow transition-all duration-300 disabled:opacity-50"
         >
           <FaRedo />
           Restart Game
         </button>
         <button
           onClick={() => navigate("/names")}
-          className="flex items-center gap-2 bg-gray-700 hover:bg-gray-800 text-white font-semibold px-5 py-2 rounded-lg shadow-md transition-all duration-300"
+          className="flex items-center gap-2 bg-gray-800 hover:bg-gray-900 text-white font-semibold px-6 py-2 rounded-lg shadow transition-all duration-300"
         >
           <FaHome />
           Home
