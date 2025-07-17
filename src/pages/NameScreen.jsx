@@ -2,7 +2,6 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 
-
 const NameScreen = () => {
   const [playerCount, setPlayerCount] = useState(2);
   const [playerNames, setPlayerNames] = useState(["", "", "", ""]);
@@ -16,12 +15,13 @@ const NameScreen = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center px-4 py-12">
+    <div className="min-h-screen flex flex-col md:flex-row items-center justify-center px-4 py-12  gap-8 md:gap-16">
+      {/* Left: Game Setup Form */}
       <motion.div
-        initial={{ opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
+        initial={{ opacity: 0, x: -30 }}
+        animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.6 }}
-        className="bg-white shadow-2xl rounded-2xl p-8 w-full max-w-xl"
+        className="bg-white shadow-2xl rounded-2xl p-8 w-full md:w-1/2 max-w-xl"
       >
         <h2 className="text-3xl font-bold text-indigo-700 mb-6 text-center">
           🎮 Set Up Your Game
@@ -71,6 +71,16 @@ const NameScreen = () => {
           🚀 Start Game
         </motion.button>
       </motion.div>
+
+      {/* Right: Illustration */}
+      <motion.img
+        src="/name.png"
+        alt="Dicey Duels Illustration"
+        initial={{ opacity: 0, x: 30 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.6 }}
+        className="w-[260px] sm:w-[340px] md:w-[400px] drop-shadow-xl"
+      />
     </div>
   );
 };
