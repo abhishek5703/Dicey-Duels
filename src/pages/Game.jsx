@@ -4,6 +4,7 @@ import PlayerCard from "../components/PlayerCard";
 import Dice from "../components/Dice";
 import GameControls from "../components/GameControls";
 import { FaRedo, FaHome } from "react-icons/fa";
+import { motion } from "framer-motion";
 
 const Game = () => {
   const location = useLocation();
@@ -80,31 +81,44 @@ const Game = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-100 to-white px-6 py-10">
-      <h1 className="text-4xl font-extrabold text-center mb-8 text-blue-700 drop-shadow-sm">
-        🎲 Dicey Duels
-      </h1>
+    <div >
+      <img
+        src="/dice-bg.svg"
+        alt="Dice background"
+        className="absolute opacity-10 top-0 left-0 w-full h-full object-cover pointer-events-none"
+      />
 
-      {/* Player Cards */}
+      <motion.h1
+        className="text-4xl font-extrabold text-center mb-8 text-blue-700 drop-shadow-sm"
+        initial={{ opacity: 0, y: -30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8 }}
+      >
+        🎲 Dicey Duels
+      </motion.h1>
+
       <div className="flex flex-wrap justify-center gap-8 mb-12 px-4">
         {players.map((player, index) => (
-          <div key={index} className="w-full sm:w-[300px]">
+          <motion.div
+            key={index}
+            className="w-full sm:w-[300px]"
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: index * 0.2 }}
+          >
             <PlayerCard
               player={player}
               isActive={index === currentPlayer}
               isWinner={gameOver && index === currentPlayer}
             />
-          </div>
+          </motion.div>
         ))}
       </div>
 
-
-      {/* Dice */}
       <div className="flex justify-center mb-10">
         <Dice value={diceValue} isRolling={isRolling} />
       </div>
 
-      {/* Game Controls */}
       <GameControls
         turnScore={turnScore}
         currentPlayer={players[currentPlayer]?.name}
@@ -113,33 +127,41 @@ const Game = () => {
         gameOver={gameOver}
       />
 
-      {/* Winner Announcement */}
       {gameOver && (
-        <div className="mt-8 text-center">
-          <h2 className="text-3xl font-bold text-green-600 animate-fade-in-up">
+        <motion.div
+          className="mt-8 text-center"
+          initial={{ scale: 0 }}
+          animate={{ scale: 1 }}
+          transition={{ type: "spring", stiffness: 200 }}
+        >
+          <h2 className="text-3xl font-bold text-green-600 animate-bounce">
             🎉 {players[currentPlayer].name} Wins!
           </h2>
-        </div>
+        </motion.div>
       )}
 
-      {/* Game Action Buttons */}
-      <div className="mt-10 flex justify-center gap-6">
+      <motion.div
+        className="mt-10 flex justify-center gap-6"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.5 }}
+      >
         <button
           onClick={resetGame}
           disabled={isRolling}
-          className="flex items-center gap-2 bg-yellow-400 hover:bg-yellow-500 text-black font-semibold px-6 py-2 rounded-lg shadow transition-all duration-300 disabled:opacity-50"
+          className="flex items-center gap-2 bg-yellow-400 hover:bg-yellow-500 text-black font-semibold px-6 py-2 rounded-lg shadow transition-all duration-300 disabled:opacity-50 cursor-pointer"
         >
           <FaRedo />
           Restart Game
         </button>
         <button
           onClick={() => navigate("/names")}
-          className="flex items-center gap-2 bg-gray-800 hover:bg-gray-900 text-white font-semibold px-6 py-2 rounded-lg shadow transition-all duration-300"
+          className="flex items-center gap-2 bg-gray-800 hover:bg-gray-900 text-white font-semibold px-6 py-2 rounded-lg shadow transition-all duration-300 cursor-pointer"
         >
           <FaHome />
           Home
         </button>
-      </div>
+      </motion.div>
     </div>
   );
 };

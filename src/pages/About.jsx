@@ -37,7 +37,7 @@ const About = () => {
 
       <div className="mt-8 flex justify-center">
         <Link to="/instructions">
-          <button className="bg-purple-600 hover:bg-purple-700 text-white font-semibold px-6 py-3 rounded-full shadow-md transition duration-300">
+          <button className="bg-purple-600 hover:bg-purple-700 text-white font-semibold px-6 py-3 rounded-full shadow-md transition duration-300 cursor-pointer">
             📖 View Instructions
           </button>
         </Link>
