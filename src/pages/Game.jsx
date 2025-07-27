@@ -152,6 +152,30 @@ const Game = () => {
         <Dice value={diceValue} isRolling={isRolling} />
       </div>
 
+      {/* 🔢 Turn Score Display */}
+      {turnScore > 0 && (
+        <motion.div
+          className="flex justify-center mb-6"
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ type: "spring", stiffness: 300 }}
+        >
+          <div className="relative bg-white/10 backdrop-blur-2xl border border-white/20 rounded-3xl px-10 py-6 shadow-[0_12px_40px_rgba(0,0,0,0.3)] text-center">
+            {/* Gradient Border Glow */}
+            <div className="absolute -inset-1 rounded-3xl bg-gradient-to-br from-red-400/50 via-yellow-300/50 to-cyan-300/40 blur-2xl opacity-30 pointer-events-none"></div>
+
+            <h3 className="text-base font-bold text-cyan-200 tracking-widest uppercase drop-shadow-md">
+              🎯 Turn Score
+            </h3>
+            <p className="text-6xl font-extrabold text-yellow-400 mt-2 drop-shadow-lg tracking-tight animate-pulse">
+              {turnScore}
+            </p>
+          </div>
+        </motion.div>
+      )}
+
+
+
       {/* ⏱ Time Bar */}
       <div className="w-full max-w-md mx-auto mb-6 px-4">
         <div className="relative h-4 bg-gray-200 rounded-full overflow-hidden">
