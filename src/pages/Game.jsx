@@ -41,7 +41,7 @@ const Game = () => {
         setShowTimeoutMessage(false);
         nextPlayer();
         setTimeLeft(15);
-      }, 1500);
+      }, 2000);
       return;
     }
 
@@ -68,10 +68,10 @@ const Game = () => {
         if (idx === rollSequence.length - 1) {
           if (val === 1) {
             setTurnScore(0);
-            nextPlayer(); // resets timer
+            nextPlayer();
           } else {
             setTurnScore(prev => prev + val);
-            setTimeLeft(15); // reset for same player
+            setTimeLeft(15); // Reset only if not 1
           }
           setIsRolling(false);
         }
@@ -156,9 +156,8 @@ const Game = () => {
       <div className="w-full max-w-md mx-auto mb-6 px-4">
         <div className="relative h-4 bg-gray-200 rounded-full overflow-hidden">
           <div
-            className={`h-full rounded-full transition-all duration-300 ${
-              timeLeft > 10 ? "bg-green-500" : timeLeft > 5 ? "bg-yellow-400" : "bg-red-500"
-            }`}
+            className={`h-full rounded-full transition-all duration-300 ${timeLeft > 10 ? "bg-green-500" : timeLeft > 5 ? "bg-yellow-400" : "bg-red-500"
+              }`}
             style={{ width: `${(timeLeft / 15) * 100}%` }}
           ></div>
         </div>
@@ -187,19 +186,36 @@ const Game = () => {
         </motion.div>
       )}
 
-      {/* ⏰ Timeout Popup */}
+      {/* ⏰  Timeout Popup */}
       {showTimeoutMessage && (
         <motion.div
-          className="fixed top-1/3 left-1/2 transform -translate-x-1/2 bg-red-600 text-white font-bold py-4 px-8 rounded-lg shadow-xl z-50"
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
         >
-          ⏰ Time Out! Turn moved to next player.
+          <motion.div
+            className="relative bg-red-600/20 text-white p-10 rounded-3xl border border-red-400/40 shadow-[0_8px_32px_0_rgba(255,0,0,0.35)] backdrop-blur-xl max-w-md w-[90%] text-center"
+            initial={{ scale: 0.8, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ type: "spring", stiffness: 200, damping: 15 }}
+          >
+            <div className="absolute -top-10 left-1/2 transform -translate-x-1/2 bg-red-600 text-white w-20 h-20 flex items-center justify-center rounded-full shadow-lg border-4 border-white/20 text-4xl animate-bounce">
+              ⏰
+            </div>
+
+            <h2 className="mt-12 text-3xl font-bold text-red-200 mb-3 drop-shadow-lg">
+              Time’s Up!
+            </h2>
+            <p className="text-lg text-red-100 mb-2">
+              You ran out of time. Turn passed to the next player.
+            </p>
+          </motion.div>
         </motion.div>
       )}
 
-      {/* 🔄 Buttons */}
+
+      {/* 🔄 Control Buttons */}
       <motion.div
         className="mt-10 flex justify-center gap-6"
         initial={{ opacity: 0 }}
