@@ -94,7 +94,8 @@ const Game = () => {
     setTurnScore(0);
 
     if (updatedPlayers[currentPlayer].score >= 100) {
-      setGameOver(true);
+      navigate("/winner", { state: { players: updatedPlayers } });
+      return;
     } else {
       nextPlayer();
     }

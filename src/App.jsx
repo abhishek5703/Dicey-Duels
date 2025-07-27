@@ -5,6 +5,9 @@ import Game from "./pages/Game";
 import Layout from "./components/Layout";
 import Instructions from "./pages/Instructions";
 import About from "./pages/About";
+import WinnerPage from "./pages/WinnerPage";
+
+
 
 const App = () => {
   return (
@@ -16,6 +19,7 @@ const App = () => {
           <Route path="/game" element={<Game />} />
           <Route path="/instructions" element={<Instructions />} />
           <Route path="/about" element={<About />} />
+          <Route path="/winner" element={<WinnerPage />} />
         </Routes>
       </Layout>
     </Router>
