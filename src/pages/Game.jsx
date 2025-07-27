@@ -18,6 +18,9 @@ const Game = () => {
   const [gameOver, setGameOver] = useState(false);
   const [isRolling, setIsRolling] = useState(false);
 
+  const [timeLeft, setTimeLeft] = useState(15);
+  const [showTimeoutMessage, setShowTimeoutMessage] = useState(false);
+
   useEffect(() => {
     if (!initialPlayers) {
       navigate("/names");
@@ -25,6 +28,29 @@ const Game = () => {
       setPlayers(initialPlayers.map(p => ({ ...p, score: 0 })));
     }
   }, [initialPlayers, navigate]);
+
+  // ⏱ Countdown logic
+  useEffect(() => {
+    if (gameOver || isRolling) return;
+
+    if (timeLeft === 0) {
+      setShowTimeoutMessage(true);
+      setTurnScore(0);
+
+      setTimeout(() => {
+        setShowTimeoutMessage(false);
+        nextPlayer();
+        setTimeLeft(15);
+      }, 1500);
+      return;
+    }
+
+    const timer = setTimeout(() => {
+      setTimeLeft(prev => prev - 1);
+    }, 1000);
+
+    return () => clearTimeout(timer);
+  }, [timeLeft, gameOver, isRolling]);
 
   const rollDice = () => {
     if (isRolling || gameOver) return;
@@ -42,9 +68,10 @@ const Game = () => {
         if (idx === rollSequence.length - 1) {
           if (val === 1) {
             setTurnScore(0);
-            nextPlayer();
+            nextPlayer(); // resets timer
           } else {
             setTurnScore(prev => prev + val);
+            setTimeLeft(15); // reset for same player
           }
           setIsRolling(false);
         }
@@ -65,10 +92,14 @@ const Game = () => {
     } else {
       nextPlayer();
     }
+
+    setTimeLeft(15);
+    setShowTimeoutMessage(false);
   };
 
   const nextPlayer = () => {
     setCurrentPlayer((prev) => (prev + 1) % players.length);
+    setTimeLeft(15);
   };
 
   const resetGame = () => {
@@ -78,10 +109,12 @@ const Game = () => {
     setCurrentPlayer(0);
     setGameOver(false);
     setDiceValue(1);
+    setTimeLeft(15);
+    setShowTimeoutMessage(false);
   };
 
   return (
-    <div >
+    <div>
       <img
         src="/dice-bg.svg"
         alt="Dice background"
@@ -115,8 +148,21 @@ const Game = () => {
         ))}
       </div>
 
-      <div className="flex justify-center mb-10">
+      <div className="flex justify-center mb-6">
         <Dice value={diceValue} isRolling={isRolling} />
+      </div>
+
+      {/* ⏱ Time Bar */}
+      <div className="w-full max-w-md mx-auto mb-6 px-4">
+        <div className="relative h-4 bg-gray-200 rounded-full overflow-hidden">
+          <div
+            className={`h-full rounded-full transition-all duration-300 ${
+              timeLeft > 10 ? "bg-green-500" : timeLeft > 5 ? "bg-yellow-400" : "bg-red-500"
+            }`}
+            style={{ width: `${(timeLeft / 15) * 100}%` }}
+          ></div>
+        </div>
+        <p className="text-center mt-1 text-sm text-gray-700">⏱️ Time left: {timeLeft}s</p>
       </div>
 
       <GameControls
@@ -127,6 +173,7 @@ const Game = () => {
         gameOver={gameOver}
       />
 
+      {/* 🎉 Game Win Message */}
       {gameOver && (
         <motion.div
           className="mt-8 text-center"
@@ -140,6 +187,19 @@ const Game = () => {
         </motion.div>
       )}
 
+      {/* ⏰ Timeout Popup */}
+      {showTimeoutMessage && (
+        <motion.div
+          className="fixed top-1/3 left-1/2 transform -translate-x-1/2 bg-red-600 text-white font-bold py-4 px-8 rounded-lg shadow-xl z-50"
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0 }}
+        >
+          ⏰ Time Out! Turn moved to next player.
+        </motion.div>
+      )}
+
+      {/* 🔄 Buttons */}
       <motion.div
         className="mt-10 flex justify-center gap-6"
         initial={{ opacity: 0 }}
