@@ -20,6 +20,8 @@ const Game = () => {
 
   const [timeLeft, setTimeLeft] = useState(15);
   const [showTimeoutMessage, setShowTimeoutMessage] = useState(false);
+  const [showRolledOneMessage, setShowRolledOneMessage] = useState(false);
+
 
   useEffect(() => {
     if (!initialPlayers) {
@@ -68,7 +70,11 @@ const Game = () => {
         if (idx === rollSequence.length - 1) {
           if (val === 1) {
             setTurnScore(0);
-            nextPlayer();
+            setShowRolledOneMessage(true);
+            setTimeout(() => {
+              setShowRolledOneMessage(false);
+              nextPlayer();
+            }, 2000);
           } else {
             setTurnScore(prev => prev + val);
             setTimeLeft(15); // Reset only if not 1
@@ -237,6 +243,35 @@ const Game = () => {
           </motion.div>
         </motion.div>
       )}
+
+      {/* 😵 Rolled One Popup */}
+      {showRolledOneMessage && (
+        <motion.div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+        >
+          <motion.div
+            className="relative bg-red-600/20 text-white p-10 rounded-3xl border border-red-400/40 shadow-[0_8px_32px_0_rgba(255,0,0,0.35)] backdrop-blur-xl max-w-md w-[90%] text-center"
+            initial={{ scale: 0.8, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ type: 'spring', stiffness: 200, damping: 15 }}
+          >
+            <div className="absolute -top-10 left-1/2 transform -translate-x-1/2 bg-red-600 text-white w-20 h-20 flex items-center justify-center rounded-full shadow-lg border-4 border-white/20 text-4xl animate-bounce">
+              🎲
+            </div>
+
+            <h2 className="mt-12 text-3xl font-bold text-red-200 mb-3 drop-shadow-lg">
+              Oops! You rolled a 1
+            </h2>
+            <p className="text-lg text-red-100 mb-2">
+              Your turn score is lost. Next player’s turn!
+            </p>
+          </motion.div>
+        </motion.div>
+      )}
+
 
 
       {/* 🔄 Control Buttons */}
