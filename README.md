@@ -99,11 +99,12 @@ git checkout -b feature-name
    
 For major changes, please open an issue first.
 
-## 📬 Contact
-Developer: Abhishek Kumar
-📧 Email: abhikumar898307@gmail.com
-🌐 GitHub: github.com/abhishek5703
-💼 LinkedIn: linkedin.com/in/abhishekkumar8983
+## 📬 Contact  
+**Developer:** Abhishek Kumar  
+📧 **Email:** abhikumar898307@gmail.com  
+🌐 **GitHub:** [github.com/abhishek5703](https://github.com/abhishek5703)  
+💼 **LinkedIn:** [linkedin.com/in/abhishekkumar8983](https://linkedin.com/in/abhishekkumar8983)
+
 
 
 
