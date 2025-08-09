@@ -1,8 +1,14 @@
 import { FaDice } from "react-icons/fa";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
+import mouseClickSound from "../assets/sound/mouse_click.mp3"; // make sure path is correct
 
 const About = () => {
+  const playClickSound = () => {
+    const audio = new Audio(mouseClickSound);
+    audio.play();
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 50 }}
@@ -37,7 +43,10 @@ const About = () => {
 
       <div className="mt-8 flex justify-center">
         <Link to="/instructions">
-          <button className="bg-purple-600 hover:bg-purple-700 text-white font-semibold px-6 py-3 rounded-full shadow-md transition duration-300 cursor-pointer">
+          <button
+            onClick={playClickSound}
+            className="bg-purple-600 hover:bg-purple-700 text-white font-semibold px-6 py-3 rounded-full shadow-md transition duration-300 cursor-pointer"
+          >
             📖 View Instructions
           </button>
         </Link>

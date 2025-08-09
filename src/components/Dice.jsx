@@ -1,5 +1,7 @@
 import "./Dice.css";
 import { motion } from "framer-motion";
+import { useEffect } from "react";
+import diceRollSound from "../assets/sound/DiceRoll.mp3";
 
 const Dice = ({ value, isRolling }) => {
   const getPips = (val) => {
@@ -39,10 +41,22 @@ const Dice = ({ value, isRolling }) => {
     return pipMap[val] || [];
   };
 
+  // Play dice sound when rolling starts
+  useEffect(() => {
+    if (isRolling) {
+      const audio = new Audio(diceRollSound);
+      audio.play();
+    }
+  }, [isRolling]);
+
   return (
     <motion.div
       className="dice-container"
-      animate={isRolling ? { rotate: [0, 180, 360], scale: [1, 1.2, 1] } : { rotate: 0 }}
+      animate={
+        isRolling
+          ? { rotate: [0, 180, 360], scale: [1, 1.2, 1] }
+          : { rotate: 0 }
+      }
       transition={{ duration: 0.6, ease: "easeInOut" }}
     >
       <div className="dice-face">

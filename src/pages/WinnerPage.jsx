@@ -1,4 +1,3 @@
-// src/pages/WinnerPage.jsx
 import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import Confetti from "react-confetti";
@@ -11,7 +10,13 @@ const WinnerPage = () => {
   const results = location.state?.players;
 
   useEffect(() => {
-    if (!results) navigate("/");
+    if (!results) {
+      navigate("/");
+    } else {
+      // Play winner sound
+      const winnerSound = new Audio("/sounds/winner.mp3");
+      winnerSound.play().catch(err => console.log("Sound play error:", err));
+    }
   }, [results, navigate]);
 
   const sortedPlayers = [...(results || [])].sort((a, b) => b.score - a.score);

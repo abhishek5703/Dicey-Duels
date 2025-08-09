@@ -1,3 +1,5 @@
+import mouseClickSound from "../assets/sound/mouse_click.mp3";
+
 const GameControls = ({
   turnScore,
   currentPlayer,
@@ -5,6 +7,11 @@ const GameControls = ({
   holdScore,
   gameOver,
 }) => {
+  const playClickSound = () => {
+    const audio = new Audio(mouseClickSound);
+    audio.play();
+  };
+
   return (
     <div className="mt-6 text-center">
       <h2 className="text-xl mb-4 font-semibold text-gray-800">
@@ -14,13 +21,19 @@ const GameControls = ({
       {!gameOver && (
         <div className="flex justify-center gap-4">
           <button
-            onClick={rollDice}
+            onClick={() => {
+              playClickSound();
+              rollDice();
+            }}
             className="px-6 py-2 bg-blue-500 text-white rounded-lg shadow-md transition-all duration-200 hover:bg-blue-600 hover:shadow-lg hover:scale-105 cursor-pointer"
           >
             🎲 Roll
           </button>
           <button
-            onClick={holdScore}
+            onClick={() => {
+              playClickSound();
+              holdScore();
+            }}
             className="px-6 py-2 bg-purple-500 text-white rounded-lg shadow-md transition-all duration-200 hover:bg-purple-600 hover:shadow-lg hover:scale-105 cursor-pointer"
           >
             ✋ Hold

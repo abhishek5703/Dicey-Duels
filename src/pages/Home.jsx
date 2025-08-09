@@ -1,8 +1,25 @@
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
+import clickSound from "../assets/sound/mouse_click.mp3"; // adjust path if needed
 
 const Home = () => {
     const navigate = useNavigate();
+
+    // Create audio object
+    const playClickSound = () => {
+        const audio = new Audio(clickSound);
+        audio.play();
+    };
+
+    const handlePlayNow = () => {
+        playClickSound();
+        navigate("/names");
+    };
+
+    const handleHowToPlay = () => {
+        playClickSound();
+        navigate("/instructions");
+    };
 
     return (
         <div className="flex flex-col-reverse lg:flex-row items-center justify-between min-h-[80vh] gap-12 px-6 md:px-12 py-10">
@@ -27,15 +44,13 @@ const Home = () => {
                     Roll the dice, outsmart your opponents, and race to the top of the scoreboard in <span className="font-semibold text-indigo-600">Dicey Duels</span>!
                 </p>
 
-
-
                 {/* Buttons Group */}
                 <div className="flex flex-col sm:flex-row sm:justify-center lg:justify-start gap-4">
                     {/* Play Now Button */}
                     <motion.button
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.97 }}
-                        onClick={() => navigate("/names")}
+                        onClick={handlePlayNow}
                         className="flex items-center justify-center gap-2 px-7 py-3 bg-gradient-to-r from-indigo-500 to-purple-500 text-white font-semibold text-lg rounded-full shadow-lg hover:from-purple-600 hover:to-indigo-600 transition-all duration-300 cursor-pointer"
                     >
                         <motion.span
@@ -51,7 +66,7 @@ const Home = () => {
                     <motion.button
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.97 }}
-                        onClick={() => navigate("/instructions")}
+                        onClick={handleHowToPlay}
                         className="px-7 py-3 border-2 border-indigo-500 text-indigo-600 font-medium text-lg rounded-full shadow-md hover:bg-indigo-50 transition duration-300 cursor-pointer"
                     >
                         📘 How to Play
@@ -66,7 +81,6 @@ const Home = () => {
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.7, delay: 0.3 }}
             >
-                {/* Soft glow background */}
                 <div className="absolute w-64 h-64 bg-purple-400 opacity-30 blur-3xl rounded-full z-0 top-10 right-10"></div>
                 <img
                     src="/dicey-hero.png"

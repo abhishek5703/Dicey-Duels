@@ -1,7 +1,25 @@
 import { FaBookOpen } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import clickSound from "../assets/sound/mouse_click.mp3"; // adjust path if needed
 
 const Instructions = () => {
+  const navigate = useNavigate();
+
+  const playClickSound = () => {
+    const audio = new Audio(clickSound);
+    audio.play();
+  };
+
+  const handleBackHome = () => {
+    playClickSound();
+    navigate("/");
+  };
+
+  const handlePlayNow = () => {
+    playClickSound();
+    navigate("/game");
+  };
+
   return (
     <div className="max-w-3xl mx-auto bg-white/70 backdrop-blur-md shadow-xl rounded-2xl px-6 sm:px-10 py-10 text-gray-800">
       <div className="flex flex-col items-center text-center">
@@ -45,18 +63,18 @@ const Instructions = () => {
       </div>
 
       <div className="flex flex-col sm:flex-row justify-center gap-4 mt-10">
-        <Link
-          to="/"
-          className="inline-block px-6 py-3 bg-gray-300 text-gray-800 font-semibold rounded-full shadow hover:bg-gray-400 transition"
+        <button
+          onClick={handleBackHome}
+          className="inline-block px-6 py-3 bg-gray-300 text-gray-800 font-semibold rounded-full shadow hover:bg-gray-400 transition cursor-pointer"
         >
           ⬅ Back to Home
-        </Link>
-        <Link
-          to="/game"
-          className="inline-block px-6 py-3 bg-indigo-600 text-white font-semibold rounded-full shadow hover:bg-indigo-700 transition"
+        </button>
+        <button
+          onClick={handlePlayNow}
+          className="inline-block px-6 py-3 bg-indigo-600 text-white font-semibold rounded-full shadow hover:bg-indigo-700 transition cursor-pointer"
         >
           🎮 Play Now
-        </Link>
+        </button>
       </div>
     </div>
   );
