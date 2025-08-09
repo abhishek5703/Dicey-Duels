@@ -1,31 +1,54 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 
 const NameScreen = () => {
   const [playerCount, setPlayerCount] = useState(2);
   const [playerNames, setPlayerNames] = useState(["", "", "", ""]);
+  const [error, setError] = useState("");
   const navigate = useNavigate();
 
   const handleStartGame = () => {
-    const players = playerNames
-      .slice(0, playerCount)
-      .map((name) => ({ name, score: 0 }));
+    const selectedNames = playerNames.slice(0, playerCount);
+
+    // Validation: if any name is empty
+    if (selectedNames.some((name) => name.trim() === "")) {
+      setError("⚠ Please enter all player names before starting the game!");
+      setTimeout(() => setError(""), 3000); // Hide after 3 seconds
+      return;
+    }
+
+    const players = selectedNames.map((name) => ({ name, score: 0 }));
     navigate("/game", { state: { players } });
   };
 
   return (
-    <div className="min-h-screen flex flex-col md:flex-row items-center justify-center px-4 py-12  gap-8 md:gap-16">
+    <div className="min-h-screen flex flex-col md:flex-row items-center justify-center px-4 py-12 gap-8 md:gap-16">
       {/* Left: Game Setup Form */}
       <motion.div
         initial={{ opacity: 0, x: -30 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.6 }}
-        className="bg-white shadow-2xl rounded-2xl p-8 w-full md:w-1/2 max-w-xl"
+        className="bg-white shadow-2xl rounded-2xl p-8 w-full md:w-1/2 max-w-xl relative"
       >
         <h2 className="text-3xl font-bold text-indigo-700 mb-6 text-center">
           🎮 Set Up Your Game
         </h2>
+
+        {/* Error Popup */}
+        <AnimatePresence>
+          {error && (
+            <motion.div
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.3 }}
+              className="mb-4 p-3 rounded-lg bg-red-100 text-red-700 border border-red-300 text-sm text-center"
+            >
+              {error}
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         <div className="mb-6">
           <label className="block text-gray-700 font-semibold mb-2 text-sm">
@@ -57,7 +80,6 @@ const NameScreen = () => {
                 names[index] = e.target.value;
                 setPlayerNames(names);
               }}
-              required
             />
           ))}
         </div>
